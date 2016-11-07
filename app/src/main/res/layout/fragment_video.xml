@@ -1,0 +1,80 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.administrator.wplayer.fragments.VideoFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        >
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:contentScrim="#ff0"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:scrimVisibleHeightTrigger="50dp"
+            >
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <SurfaceView
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        />
+                </FrameLayout>
+
+            </LinearLayout>
+
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+        <LinearLayout
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:orientation="vertical"
+            android:id="@+id/tool_bar"
+            android:layout_gravity="bottom"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:background="#85f5bd"
+            app:layout_collapseMode="pin">
+        </LinearLayout>
+
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@id/app_bar"
+        android:layout_marginRight="8dp"
+        app:layout_anchorGravity="bottom|end|right"
+        />
+    <FrameLayout
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ProgressBar
+            android:id="@+id/local_video_progress"
+            android:layout_gravity="center"
+            android:layout_width="80dp"
+            android:indeterminateDrawable="@drawable/drawable_progress"
+            android:layout_height="80dp" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/local_video_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+        </android.support.v7.widget.RecyclerView>
+    </FrameLayout>
+
+</android.support.design.widget.CoordinatorLayout>
