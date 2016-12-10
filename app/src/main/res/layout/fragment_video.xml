@@ -26,12 +26,43 @@
                 android:layout_height="wrap_content">
                 <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <SurfaceView
+                    android:layout_height="200dp">
+                    <com.example.administrator.wplayer.customview.CustomSurfaceView
                         android:id="@+id/video_top_window"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
                         />
+                    <LinearLayout
+                        android:id="@+id/video_collector"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:gravity="center_vertical"
+                        android:background="#e2dede"
+                        android:alpha="0.5"
+                        android:visibility="gone"
+                        android:orientation="horizontal">
+                        <SeekBar
+                            android:id="@+id/video_progress"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/txt_video_time"
+                            android:layout_marginRight="5dp"
+                            android:layout_width="100dp"
+                            android:gravity="right"
+                            android:textColor="#000"
+                            android:text="0:00:00"
+                            android:layout_height="20dp" />
+                        <ImageView
+                            android:id="@+id/full_screen_btn"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@mipmap/full_screen_icon"
+                            android:layout_marginRight="4dp"
+                            />
+                    </LinearLayout>
                 </FrameLayout>
 
             </LinearLayout>
@@ -48,16 +79,28 @@
             android:layout_height="?actionBarSize"
             android:background="#85f5bd"
             app:layout_collapseMode="pin">
+            <TextView
+                android:id="@+id/video_title"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:textSize="18sp"
+                android:maxLines="1"
+                android:textColor="#c67fef"
+                android:layout_marginRight="80dp"
+                android:ellipsize="none"
+                android:layout_height="match_parent" />
         </LinearLayout>
 
 
     </android.support.design.widget.AppBarLayout>
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floating_play_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_anchor="@id/app_bar"
         android:layout_marginRight="8dp"
+        android:src="@mipmap/play_icon"
         app:layout_anchorGravity="bottom|end|right"
         />
     <FrameLayout
