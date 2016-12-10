@@ -4,6 +4,7 @@ package com.example.administrator.wplayer.fragments;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,6 +16,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -30,6 +33,7 @@ import com.example.administrator.wplayer.base.BaseFragment;
 import com.example.administrator.wplayer.models.LocalVideoData;
 import com.example.administrator.wplayer.utils.Utils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +66,10 @@ public class VideoFragment extends BaseFragment implements Runnable, RecycleAdap
     private RecyclerView recyclerView;
     private RecycleAdapter adapter;
     private ProgressBar progressBar;
-
+    private SurfaceView mVideoWindow;
+    private MediaPlayer mMediaPlayer;
+    private SurfaceHolder mVideoHolder;
+    int playPosition = -1;
 
     public VideoFragment() {
         // Required empty public constructor
@@ -72,6 +79,9 @@ public class VideoFragment extends BaseFragment implements Runnable, RecycleAdap
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mVideo = new ArrayList<>();
+        mMediaPlayer = new MediaPlayer();
+        Thread thread = new Thread(this);
+        thread.start();
 
     }
 
@@ -85,12 +95,15 @@ public class VideoFragment extends BaseFragment implements Runnable, RecycleAdap
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_video, container, false);
+        initView(view);
+        mVideoHolder = mVideoWindow.getHolder();
+        return view;
+    }
+
+    private void initView(View view) {
         recyclerView = (RecyclerView) view.findViewById(R.id.local_video_list);
         progressBar = (ProgressBar) view.findViewById(R.id.local_video_progress);
-        Thread thread = new Thread(this);
-        thread.start();
-
-        return view;
+        mVideoWindow = (SurfaceView) view.findViewById(R.id.video_top_window);
     }
 
     public List<LocalVideoData> getLocalVideoData(){
@@ -137,6 +150,33 @@ public class VideoFragment extends BaseFragment implements Runnable, RecycleAdap
     //视频列表Item监听
     @Override
     public void onChildClickListener(RecyclerView recyclerView, View itemView, int position, LocalVideoData videoData) {
-        Toast.makeText(getContext(), videoData.getName(), Toast.LENGTH_SHORT).show();
+        if (playPosition != position){
+            if (mMediaPlayer.isPlaying()){
+                mMediaPlayer.stop();
+                mMediaPlayer.reset();
+            }
+            String videoUrl = videoData.getData();
+            playPosition = position;
+            if (mVideoHolder != null){
+                mMediaPlayer.setDisplay(mVideoHolder);
+            }
+            try {
+                mMediaPlayer.setDataSource(getContext(),Uri.parse(videoUrl));
+                mMediaPlayer.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mMediaPlayer.start();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        if (mMediaPlayer.isPlaying()){
+            mMediaPlayer.stop();
+            mMediaPlayer.reset();
+        }
+        mMediaPlayer = null;
+        super.onDestroy();
     }
 }

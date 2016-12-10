@@ -106,4 +106,9 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         }
         transaction.commit();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

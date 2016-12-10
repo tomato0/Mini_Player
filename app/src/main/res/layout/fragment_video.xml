@@ -28,6 +28,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <SurfaceView
+                        android:id="@+id/video_top_window"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
                         />
