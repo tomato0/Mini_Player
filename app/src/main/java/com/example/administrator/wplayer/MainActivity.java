@@ -54,6 +54,13 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction tx = manager.beginTransaction();
         tx.add(R.id.main_pager,mVideoFragment);
+        tx.add(R.id.main_pager,mAudioFragment);
+        tx.add(R.id.main_pager,mNetVideoFragment);
+        tx.add(R.id.main_pager,mNetAudioFragment);
+        tx.show(mVideoFragment);
+        tx.show(mAudioFragment);
+        tx.show(mNetVideoFragment);
+        tx.show(mNetAudioFragment);
         tx.commit();
     }
 
@@ -68,19 +75,34 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         switch (checkedId) {
             case R.id.rb_video:
-                transaction.replace(R.id.main_pager,mVideoFragment);
+                transaction.show(mVideoFragment);
+                transaction.hide(mAudioFragment);
+                transaction.hide(mNetVideoFragment);
+                transaction.hide(mNetAudioFragment);
                 break;
             case R.id.rb_audio:
-                transaction.replace(R.id.main_pager,mAudioFragment);
+                transaction.hide(mVideoFragment);
+                transaction.show(mAudioFragment);
+                transaction.hide(mNetVideoFragment);
+                transaction.hide(mNetAudioFragment);
                 break;
             case R.id.rb_net_video:
-                transaction.replace(R.id.main_pager,mNetVideoFragment);
+                transaction.hide(mVideoFragment);
+                transaction.hide(mAudioFragment);
+                transaction.show(mNetVideoFragment);
+                transaction.hide(mNetAudioFragment);
                 break;
             case R.id.rb_net_audio:
-                transaction.replace(R.id.main_pager,mNetAudioFragment);
+                transaction.hide(mVideoFragment);
+                transaction.hide(mAudioFragment);
+                transaction.hide(mNetVideoFragment);
+                transaction.show(mNetAudioFragment);
                 break;
             default:
-                transaction.replace(R.id.main_pager,mVideoFragment);
+                transaction.show(mVideoFragment);
+                transaction.hide(mAudioFragment);
+                transaction.hide(mNetVideoFragment);
+                transaction.hide(mNetAudioFragment);
         }
         transaction.commit();
     }
