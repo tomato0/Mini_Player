@@ -20,6 +20,10 @@ public class CustomSurfaceView extends SurfaceView {
         super(context);
     }
 
+    public void setListener(TouchListener listener) {
+        this.listener = listener;
+    }
+
     public CustomSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
@@ -29,16 +33,22 @@ public class CustomSurfaceView extends SurfaceView {
         int action = event.getAction();
         switch (action) {
             case MotionEvent.ACTION_DOWN:
+                listener.onSurfaceViewTouchListener_DOWN();
                 break;
             case MotionEvent.ACTION_MOVE:
+                listener.onSurfaceViewTouchListener_MOVE();
                 break;
             case MotionEvent.ACTION_UP:
-                listener.onSurfaceViewTouchListener();
+                if (null != listener){
+                    listener.onSurfaceViewTouchListener_UP();
+                }
                 break;
         }
         return true;
     }
-    interface TouchListener{
-        void onSurfaceViewTouchListener();
+    public interface TouchListener{
+        void onSurfaceViewTouchListener_UP();
+        void onSurfaceViewTouchListener_MOVE();
+        void onSurfaceViewTouchListener_DOWN();
     }
 }

@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "com.example.administrator.wplayer"
         minSdkVersion 14
-        targetSdkVersion 24
+        targetSdkVersion 14
         versionCode 1
         versionName "1.0"
     }
@@ -25,4 +25,9 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.2.0'
     compile 'com.android.support:support-v4:24.2.0'
     compile 'com.android.support:design:24.2.0'
+    compile files('libs/Msc.jar')
+    compile 'org.xutils:xutils:3.5.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile project(':vitamio')
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
 }
