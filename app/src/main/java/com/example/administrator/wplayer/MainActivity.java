@@ -74,25 +74,25 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         switch (checkedId) {
-            case R.id.rb_video:
+            case R.id.rb_video://本地视频
                 transaction.show(mVideoFragment);
                 transaction.hide(mAudioFragment);
                 transaction.hide(mNetVideoFragment);
                 transaction.hide(mNetAudioFragment);
                 break;
-            case R.id.rb_audio:
+            case R.id.rb_audio://音乐分类
                 transaction.hide(mVideoFragment);
                 transaction.show(mAudioFragment);
                 transaction.hide(mNetVideoFragment);
                 transaction.hide(mNetAudioFragment);
                 break;
-            case R.id.rb_net_video:
+            case R.id.rb_net_video://网络视频
                 transaction.hide(mVideoFragment);
                 transaction.hide(mAudioFragment);
                 transaction.show(mNetVideoFragment);
                 transaction.hide(mNetAudioFragment);
                 break;
-            case R.id.rb_net_audio:
+            case R.id.about_tab://关于
                 transaction.hide(mVideoFragment);
                 transaction.hide(mAudioFragment);
                 transaction.hide(mNetVideoFragment);

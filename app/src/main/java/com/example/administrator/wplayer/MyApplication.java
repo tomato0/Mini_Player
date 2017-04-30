@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Environment;
 
+import com.example.administrator.wplayer.single.SpaceService;
+import com.example.administrator.wplayer.single.StorageService;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
 //import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
@@ -40,6 +42,15 @@ public class MyApplication extends Application {
       // 请勿在“ =” 与 appid 之间添加任务空字符或者转义符
         SpeechUtility.createUtility(this, SpeechConstant.APPID + "=5795c210");
 
+
+        SpaceService instance1 = SpaceService.getInstance();
+        instance1.init(this);
+        StorageService instance = StorageService.getInstance();
+        instance.init(this);
+
+        //xUtils注册
+        x.Ext.init(this);
+
         //初始化ImageLoader
 //        initUniversalImageLoader();
 
@@ -61,13 +72,13 @@ public class MyApplication extends Application {
 //
 //        int memClass = ((ActivityManager) getSystemService(Context.ACTIVITY_SERVICE))
 //                .getMemoryClass();
-//        // Use 1/8th of the available memory for this memory cache.
+//        // Use anim1/8th of the available memory for this memory cache.
 //        int memCacheSize = 1024 * 1024 * memClass / 8;
 //
 //        File cacheDir = new File(Environment.getExternalStorageDirectory().getPath() + "/jiecao/cache");
 //        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
 //                .threadPoolSize(3) // default  线程池内加载的数量
-//                .threadPriority(Thread.NORM_PRIORITY - 2) // default 设置当前线程的优先级
+//                .threadPriority(Thread.NORM_PRIORITY - anim2) // default 设置当前线程的优先级
 //                .denyCacheImageMultipleSizesInMemory()
 //                .diskCacheFileNameGenerator(new Md5FileNameGenerator())
 //                .memoryCache(new UsingFreqLimitedMemoryCache(memCacheSize)) // You can pass your own memory cache implementation/

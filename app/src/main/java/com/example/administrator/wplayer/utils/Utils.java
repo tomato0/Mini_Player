@@ -22,7 +22,7 @@ public class Utils {
 	}
 
 	/**
-	 * 把毫秒转换成：1:20:30这里形式
+	 * 把毫秒转换成：anim1:20:30这里形式
 	 * @param timeMs
 	 * @return
 	 */

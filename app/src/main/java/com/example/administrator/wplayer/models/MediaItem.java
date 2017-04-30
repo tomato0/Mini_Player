@@ -5,10 +5,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 作者：wangshaoqiang on 2016/7/18 09:16
- * 作用：音频
+ * 作用：媒体类
  */
 public class MediaItem implements Parcelable {
 
@@ -27,6 +28,10 @@ public class MediaItem implements Parcelable {
     private String imageUrl;
 
     private Bitmap bitmap;
+
+    private String lrc;
+
+    private List<String> type;
 
     public MediaItem() {
     }
@@ -106,6 +111,22 @@ public class MediaItem implements Parcelable {
         this.bitmap = bitmap;
     }
 
+    public String getLrc() {
+        return lrc;
+    }
+
+    public void setLrc(String lrc) {
+        this.lrc = lrc;
+    }
+
+    public List<String> getType() {
+        return type;
+    }
+
+    public void setType(List<String> type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         return "MediaItem{" +
@@ -117,8 +138,11 @@ public class MediaItem implements Parcelable {
                 ", desc='" + desc + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", bitmap=" + bitmap +
+                ", lrc='" + lrc + '\'' +
+                ", type=" + type +
                 '}';
     }
+
 
     @Override
     public int describeContents() {
@@ -135,6 +159,8 @@ public class MediaItem implements Parcelable {
         dest.writeString(this.desc);
         dest.writeString(this.imageUrl);
         dest.writeParcelable(this.bitmap, flags);
+        dest.writeString(this.lrc);
+        dest.writeStringList(this.type);
     }
 
     protected MediaItem(Parcel in) {
@@ -146,6 +172,8 @@ public class MediaItem implements Parcelable {
         this.desc = in.readString();
         this.imageUrl = in.readString();
         this.bitmap = in.readParcelable(Bitmap.class.getClassLoader());
+        this.lrc = in.readString();
+        this.type = in.createStringArrayList();
     }
 
     public static final Creator<MediaItem> CREATOR = new Creator<MediaItem>() {

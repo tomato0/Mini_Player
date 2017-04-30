@@ -6,8 +6,6 @@ import android.view.ViewGroup;
 
 /**
  * 作者：wangshaoqiang on 2016/7/19 11:42
- * 微信：yangguangfu520
- * QQ号：541433511
  * 作用：自定义VideoView
  */
 public class VideoView extends android.widget.VideoView {

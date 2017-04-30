@@ -4,6 +4,10 @@ android {
     compileSdkVersion 24
     buildToolsVersion "24.0.2"
 
+    //解决png图报错
+    aaptOptions.cruncherEnabled = false
+    aaptOptions.useNewCruncher = false
+
     defaultConfig {
         applicationId "com.example.administrator.wplayer"
         minSdkVersion 14
@@ -29,5 +33,7 @@ dependencies {
     compile 'org.xutils:xutils:3.5.0'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile project(':vitamio')
-    compile 'com.squareup.retrofit2:retrofit:2.2.0'
+    compile 'org.xutils:xutils:3.3.36'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-scalars:2.1.0'
 }

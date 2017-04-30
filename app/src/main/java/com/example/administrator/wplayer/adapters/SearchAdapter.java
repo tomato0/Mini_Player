@@ -63,9 +63,9 @@ public class SearchAdapter extends BaseAdapter {
         SearchBean.ItemData mediaItem = mediaItems.get(position);
         viewHoder.tv_name.setText(mediaItem.getItemTitle());
         viewHoder.tv_desc.setText(mediaItem.getKeywords());
-        //1.使用xUtils3请求图片
+        //anim1.使用xUtils3请求图片
 //        x.image().bind(viewHoder.iv_icon,mediaItem.getImageUrl());
-        //2.使用Glide请求图片
+        //anim2.使用Glide请求图片
 //        Glide.with(context).load(mediaItem.getImageUrl())
 //                .diskCacheStrategy(DiskCacheStrategy.ALL)
 //                .placeholder(R.drawable.video_default)

@@ -15,6 +15,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.Toast;
 
 
@@ -22,24 +23,19 @@ import com.example.administrator.wplayer.IMusicPlayerService;
 import com.example.administrator.wplayer.R;
 import com.example.administrator.wplayer.activity.AudioPlayerActivity;
 import com.example.administrator.wplayer.models.MediaItem;
+import com.example.administrator.wplayer.single.MediaDataManager;
 import com.example.administrator.wplayer.utils.CacheUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
-
-/**
- * 作者：尚硅谷-杨光福 on 2016/7/22 15:55
- * 微信：yangguangfu520
- * QQ号：541433511
- * 作用：xxxx
- */
+import java.util.List;
 public class MusicPlayerService extends Service {
+    private static final String TAG = "MusicPlayerService";
 
-    public static final String OPENAUDIO = "com.atguigu.mobileplayer_OPENAUDIO";
-    private ArrayList<MediaItem> mediaItems;
+    public static final String OPENAUDIO = "com.wsq.mobileplayer_OPENAUDIO";
+    private List<MediaItem> mediaItems;
     private int position;
 
     /**
@@ -67,75 +63,31 @@ public class MusicPlayerService extends Service {
      * 播放模式
      */
     private int playmode = REPEAT_NORMAL;
-
-
-
+    private MediaDataManager mediaDataManager;
 
 
     @Override
     public void onCreate() {
         super.onCreate();
         playmode = CacheUtils.getPlaymode(this,"playmode");
+        mediaDataManager = MediaDataManager.getInstance();
         //加载音乐列表
-        getDataFromLocal();
+//        getDataFromLocal();
     }
 
+
     private void getDataFromLocal() {
-
-        new Thread() {
-            @Override
-            public void run() {
-                super.run();
-
-                mediaItems = new ArrayList<>();
-                ContentResolver resolver = getContentResolver();
-                Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                String[] objs = {
-                        MediaStore.Audio.Media.DISPLAY_NAME,//视频文件在sdcard的名称
-                        MediaStore.Audio.Media.DURATION,//视频总时长
-                        MediaStore.Audio.Media.SIZE,//视频的文件大小
-                        MediaStore.Audio.Media.DATA,//视频的绝对地址
-                        MediaStore.Audio.Media.ARTIST,//歌曲的演唱者
-
-                };
-                Cursor cursor = resolver.query(uri, objs, null, null, null);
-                if (cursor != null) {
-                    while (cursor.moveToNext()) {
-
-                        MediaItem mediaItem = new MediaItem();
-
-                        mediaItems.add(mediaItem);//写在上面
-
-                        String name = cursor.getString(0);//视频的名称
-                        mediaItem.setName(name);
-
-                        long duration = cursor.getLong(1);//视频的时长
-                        mediaItem.setDuration(duration);
-
-                        long size = cursor.getLong(2);//视频的文件大小
-                        mediaItem.setSize(size);
-
-                        String data = cursor.getString(3);//视频的播放地址
-                        mediaItem.setData(data);
-
-                        String artist = cursor.getString(4);//艺术家
-                        mediaItem.setArtist(artist);
-
-
-                    }
-
-                    cursor.close();
-
-                }
-
+        if (null != mediaDataManager){
+            if (null != mediaDataManager.getAudioMediaItems()) {
+                mediaItems = mediaDataManager.getAudioMediaItems();
             }
-        }.start();
-
+        }
     }
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
+        getDataFromLocal();
         return stub;
     }
 
@@ -232,6 +184,7 @@ public class MusicPlayerService extends Service {
      */
     private void openAudio(int position) {
         this.position = position;
+        getDataFromLocal();
         if (mediaItems != null && mediaItems.size() > 0) {
 
             mediaItem = mediaItems.get(position);
@@ -248,6 +201,7 @@ public class MusicPlayerService extends Service {
                 mediaPlayer.setOnCompletionListener(new MyOnCompletionListener());
                 mediaPlayer.setOnErrorListener(new MyOnErrorListener());
                 mediaPlayer.setDataSource(mediaItem.getData());
+                Log.d(TAG,"---->"+mediaItem.toString());
                 mediaPlayer.prepareAsync();
 
 
@@ -318,6 +272,7 @@ public class MusicPlayerService extends Service {
     private void start() {
 
         mediaPlayer.start();
+        Log.d(TAG,"music start");
 
         //当播放歌曲的时候，在状态显示正在播放，点击的时候，可以进入音乐播放页面
         manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -327,9 +282,10 @@ public class MusicPlayerService extends Service {
         PendingIntent pendingIntent = PendingIntent.getActivity(this,1,intent, PendingIntent.FLAG_UPDATE_CURRENT);
         Notification notification = new Notification.Builder(this)
                 .setSmallIcon(R.drawable.notification_music_playing)
-                .setContentTitle("321音乐")
+                .setContentTitle("小眼圈音乐")
                 .setContentText("正在播放:"+getName())
                 .setContentIntent(pendingIntent)
+                .setOngoing(true)
                 .build();
         manager.notify(1, notification);
     }
@@ -401,9 +357,9 @@ public class MusicPlayerService extends Service {
      */
     private void next() {
 
-        //1.根据当前的播放模式，设置下一个的位置
+        //anim1.根据当前的播放模式，设置下一个的位置
         setNextPosition();
-        //2.根据当前的播放模式和下标位置去播放音频
+        //anim2.根据当前的播放模式和下标位置去播放音频
         openNextAudio();
     }
 
@@ -455,9 +411,9 @@ public class MusicPlayerService extends Service {
      */
     private void pre() {
 
-        //1.根据当前的播放模式，设置上一个的位置
+        //anim1.根据当前的播放模式，设置上一个的位置
         setPrePosition();
-        //2.根据当前的播放模式和下标位置去播放音频
+        //anim2.根据当前的播放模式和下标位置去播放音频
         openPreAudio();
     }
 

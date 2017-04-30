@@ -182,15 +182,15 @@ public class SearchActivity extends Activity {
 
 
     private void showDialog() {
-        //1.创建RecognizerDialog对象
+        //anim1.创建RecognizerDialog对象
         RecognizerDialog mDialog = new RecognizerDialog(this, new MyInitListener());
-        //2.设置accent、 language等参数
+        //anim2.设置accent、 language等参数
         mDialog.setParameter(SpeechConstant.LANGUAGE, "zh_cn");//中文
         mDialog.setParameter(SpeechConstant.ACCENT, "mandarin");//普通话
         //若要将UI控件用于语义理解，必须添加以下参数设置，设置之后onResult回调返回将是语义理解
         //结果
-        // mDialog.setParameter("asr_sch", "1");
-        // mDialog.setParameter("nlp_version", "2.0");
+        // mDialog.setParameter("asr_sch", "anim1");
+        // mDialog.setParameter("nlp_version", "anim2.0");
         //3.设置回调接口
         mDialog.setListener(new MyRecognizerDialogListener());
         //4.显示dialog，接收语音输入

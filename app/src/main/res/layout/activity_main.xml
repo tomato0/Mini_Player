@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,7 +13,9 @@
 
         android:id="@+id/main_pager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
 
     </FrameLayout>
     <!--RadioGroup-->
@@ -37,22 +39,22 @@
             android:id="@+id/rb_audio"
             android:drawableTop="@drawable/rb_audio_drawable_selector"
             style="@style/main_radioButton"
-            android:text="本地音乐"
+            android:text="音乐"
             />
         <RadioButton
             android:id="@+id/rb_net_video"
             android:drawableTop="@drawable/rb_net_video_drawable_selector"
             style="@style/main_radioButton"
-            android:text="网络视频"
+            android:text="在线视频"
             />
         <RadioButton
-            android:id="@+id/rb_net_audio"
+            android:id="@+id/about_tab"
             android:drawableTop="@drawable/rb_net_audio_drawable_selector"
             style="@style/main_radioButton"
-            android:text="网络音乐"
+            android:text="关于"
             />
     </RadioGroup>
 
 
 
-</FrameLayout>
+</LinearLayout>

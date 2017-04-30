@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.audiofx.Visualizer;
@@ -23,7 +24,9 @@ import android.widget.Toast;
 import com.example.administrator.wplayer.IMusicPlayerService;
 import com.example.administrator.wplayer.R;
 import com.example.administrator.wplayer.models.MediaItem;
+import com.example.administrator.wplayer.service.DownMusicService;
 import com.example.administrator.wplayer.service.MusicPlayerService;
+import com.example.administrator.wplayer.single.MediaDataManager;
 import com.example.administrator.wplayer.utils.LyricUtils;
 import com.example.administrator.wplayer.utils.Utils;
 import com.example.administrator.wplayer.view.BaseVisualizerView;
@@ -35,7 +38,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
-
+import java.util.List;
 
 
 /**
@@ -189,6 +192,13 @@ public class AudioPlayerActivity extends AppCompatActivity implements View.OnCli
             }
         } else if ( v == btnLyrc ) {
             // Handle clicks for btnLyrc
+            MediaDataManager instance = MediaDataManager.getInstance();
+            List<MediaItem> audioMediaItems = instance.getAudioMediaItems();
+            if (audioMediaItems != null){
+                Intent intent = new Intent(this, DownMusicService.class);
+                intent.putExtra("music", audioMediaItems.get(position));
+                startService(intent);
+            }
         }
     }
 
@@ -283,12 +293,12 @@ public class AudioPlayerActivity extends AppCompatActivity implements View.OnCli
             switch (msg.what){
                 case SHOW_LYRIC://显示歌词
 
-                    //1.得到当前的进度
+                    //anim1.得到当前的进度
                     try {
                         int currentPosition = service.getCurrentPosition();
 
 
-                        //2.把进度传入ShowLyricView控件，并且计算该高亮哪一句
+                        //anim2.把进度传入ShowLyricView控件，并且计算该高亮哪一句
 
                         showLyricView.setshowNextLyric(currentPosition);
                         //3.实时的发消息
@@ -302,11 +312,11 @@ public class AudioPlayerActivity extends AppCompatActivity implements View.OnCli
                 case PROGRESS:
 
                     try {
-                        //1.得到当前进度
+                        //anim1.得到当前进度
                         int currentPosition = service.getCurrentPosition();
 
 
-                        //2.设置SeekBar.setProgress(进度)
+                        //anim2.设置SeekBar.setProgress(进度)
                         seekbarAudio.setProgress(currentPosition);
 
                         //3.时间进度跟新
@@ -341,12 +351,12 @@ public class AudioPlayerActivity extends AppCompatActivity implements View.OnCli
     private void initData() {
         utils = new Utils();
 //        //注册广播
-//        receiver = new MyReceiver();
-//        IntentFilter intentFilter = new IntentFilter();
-//        intentFilter.addAction(MusicPlayerService.OPENAUDIO);
-//        registerReceiver(receiver, intentFilter);
+        receiver = new MyReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(MusicPlayerService.OPENAUDIO);
+        registerReceiver(receiver, intentFilter);
 
-        //1.EventBus注册
+        //anim1.EventBus注册
         EventBus.getDefault().register(this);//this是当前类
     }
 
@@ -418,7 +428,7 @@ public class AudioPlayerActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-//    @Subscribe(threadMode = ThreadMode.MAIN,sticky = false,priority = 0)
+    @Subscribe(threadMode = ThreadMode.MAIN,sticky = false,priority = 0)
     public void onEventMainThread(MediaItem mediaItem){
         showLyric();
         showViewData();
@@ -496,7 +506,7 @@ public class AudioPlayerActivity extends AppCompatActivity implements View.OnCli
 
     private void bindAndStartService() {
         Intent intent = new Intent(this, MusicPlayerService.class);
-        intent.setAction("com.atguigu.mobileplayer_OPENAUDIO");
+        intent.setAction("com.wsq.mobileplayer_OPENAUDIO");
         bindService(intent, con, Context.BIND_AUTO_CREATE);
         startService(intent);//不至于实例化多个服务
     }
@@ -523,7 +533,7 @@ public class AudioPlayerActivity extends AppCompatActivity implements View.OnCli
 //            receiver = null;
 //        }
 
-        //2.EventBus取消注册
+        //anim2.EventBus取消注册
         EventBus.getDefault().unregister(this);
 
         //解绑服务

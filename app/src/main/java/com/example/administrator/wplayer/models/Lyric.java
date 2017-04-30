@@ -1,13 +1,5 @@
 package com.example.administrator.wplayer.models;
 
-/**
- * 作者：尚硅谷-杨光福 on 2016/7/25 09:38
- * 微信：yangguangfu520
- * QQ号：541433511
- * 作用：歌词类
- * 例如
- * [01:21.35]我在这里寻找
- */
 public class Lyric {
     /**
      * 歌词内容

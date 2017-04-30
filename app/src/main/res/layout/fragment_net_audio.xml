@@ -1,13 +1,186 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     tools:context="com.example.administrator.wplayer.fragments.NetAudioFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
+        android:id="@+id/deeply_store_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="@dimen/deeply_clean_header_height"
+        android:background="#304C78"
+        android:orientation="horizontal"
+        android:gravity="center"
+        >
 
-</FrameLayout>
+        <LinearLayout
+            android:id="@+id/local_store_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_marginLeft="@dimen/deeply_clean_header_marginleft"
+            >
+            <com.example.administrator.wplayer.view.CircleProgressView
+                android:id="@+id/local_store_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:radius="@dimen/deeply_clean_header_circle_radius"
+                app:stripeWidth="@dimen/deeply_clean_header_circle_stripeWidth"
+                app:backgroundProgressColor="#6F83A1"
+                app:backgroundInColor="#304C78"
+                app:progressColor="#FEFEFE"
+                app:textSizeOne="@dimen/deeply_clean_header_circle_textone_size"
+                app:textSizeTwo="@dimen/deeply_clean_header_circle_texttwo_size"
+                app:textSizeThree="@dimen/deeply_clean_header_circle_textthree_size"
+                app:textColorTwo="@color/textview_color_white"
+                app:textBoldOne="true"
+                />
+            <TextView
+                android:id="@+id/local_store_text"
+                android:textSize="@dimen/deeply_clean_header_space_text_size"
+                android:textColor="@color/textview_color_white"
+                android:layout_marginTop="@dimen/deeply_clean_header_space_text_margintop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/deeply_header_middle_view"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:id="@+id/sdCard_store_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="8dp"
+            android:gravity="center_horizontal"
+            android:layout_marginRight="@dimen/deeply_clean_header_marginright"
+            >
+            <com.example.administrator.wplayer.view.CircleProgressView
+                android:id="@+id/sdCard_store_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:radius="@dimen/deeply_clean_header_circle_radius"
+                app:stripeWidth="@dimen/deeply_clean_header_circle_stripeWidth"
+                app:backgroundProgressColor="#6F83A1"
+                app:backgroundInColor="#304C78"
+                app:progressColor="#FEFEFE"
+                app:textSizeOne="@dimen/deeply_clean_header_circle_textone_size"
+                app:textSizeTwo="@dimen/deeply_clean_header_circle_texttwo_size"
+                app:textSizeThree="@dimen/deeply_clean_header_circle_textthree_size"
+                app:textColorTwo="@color/textview_color_white"
+                app:textBoldOne="true"
+                />
+            <TextView
+                android:id="@+id/sdCard_store_text"
+                android:textSize="@dimen/deeply_clean_header_space_text_size"
+                android:layout_marginTop="@dimen/deeply_clean_header_space_text_margintop"
+                android:textColor="@color/textview_color_white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/store_text_layout"
+            android:layout_width="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="@dimen/deeply_clean_header_store_layout_marginLeft"
+            android:layout_marginRight="@dimen/deeply_clean_header_marginright"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+
+            >
+            <TextView
+                android:id="@+id/free_store_string_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/textview_color_white"
+                android:textSize="@dimen/deeply_clean_header_store_string_size"
+                />
+
+            <TextView
+                android:id="@+id/free_store_size_text"
+                android:layout_below="@id/free_store_string_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/textview_color_white"
+                android:textSize="@dimen/deeply_clean_header_space_size_size"
+                />
+
+            <TextView
+                android:id="@+id/free_store_unit_text"
+                android:layout_toRightOf="@id/free_store_size_text"
+                android:layout_alignBottom="@id/free_store_size_text"
+                android:layout_marginBottom="@dimen/deeply_detail_header_store_unit_bottommargin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/textview_color_white"
+                android:textSize="@dimen/deeply_clean_header_space_unit_size"
+                />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/about_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:textSize="20dp"
+            android:text="关于"
+            />
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@mipmap/indicator_white"
+            />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider_color"/>
+
+    <LinearLayout
+        android:id="@+id/version_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:textSize="20dp"
+            android:text="版本:"
+            />
+        <TextView
+            android:layout_gravity="right|center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="small eye v_1.0"
+            />
+    </LinearLayout>
+
+</LinearLayout>

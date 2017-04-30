@@ -19,6 +19,7 @@ public class MediaDataManager {
 
     private static MediaDataManager mInstance;
     private List<MediaItem> mediaItems;
+    private List<MediaItem> audioMediaItems;
 
     public VideoPlayInfo getInfoCallBack() {
         return infoCallBack;
@@ -41,11 +42,19 @@ public class MediaDataManager {
         return mInstance;
     }
 
-    public List<MediaItem> getMediaItems() {
+    public List<MediaItem> getVideoMediaItems() {
         return mediaItems;
     }
 
-    public void setMediaItems(List<MediaItem> mediaItems) {
+    public void setVideoMediaItems(List<MediaItem> mediaItems) {
         this.mediaItems = mediaItems;
+    }
+
+    public List<MediaItem> getAudioMediaItems() {
+        return audioMediaItems;
+    }
+
+    public void setAudioMediaItems(List<MediaItem> audioMediaItems) {
+        this.audioMediaItems = audioMediaItems;
     }
 }

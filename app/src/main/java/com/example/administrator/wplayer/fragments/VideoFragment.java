@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -113,6 +114,8 @@ public class VideoFragment extends BaseFragment implements Runnable, RecycleAdap
         }
     };
     private VideoPlayCallBack playCallBack;
+    private ImageView imgAnim;
+    private AnimationDrawable anim;
 
     public VideoFragment() {
         // Required empty public constructor
@@ -167,6 +170,10 @@ public class VideoFragment extends BaseFragment implements Runnable, RecycleAdap
     }
 
     private void initView(View view) {
+        imgAnim = (ImageView) view.findViewById(R.id.img_anim);
+        imgAnim.setImageResource(R.drawable.anim_eye);
+        anim = (AnimationDrawable) imgAnim.getDrawable();
+        anim.start();
         recyclerView = (RecyclerView) view.findViewById(R.id.local_video_list);
         progressBar = (ProgressBar) view.findViewById(R.id.local_video_progress);
         mVideoWindow = (CustomSurfaceView) view.findViewById(R.id.video_top_window);
@@ -176,6 +183,7 @@ public class VideoFragment extends BaseFragment implements Runnable, RecycleAdap
         mVideoPlayBtn.setEnabled(false);
         mVideoTitle = (TextView) view.findViewById(R.id.video_title);
         mVideoCollector = (LinearLayout) view.findViewById(R.id.video_collector);
+        mVideoCollector.setVisibility(View.GONE);
         mFullScreenBtn = (ImageView) view.findViewById(R.id.full_screen_btn);
         setListener();
 
@@ -186,6 +194,12 @@ public class VideoFragment extends BaseFragment implements Runnable, RecycleAdap
         mVideoProgress.setOnSeekBarChangeListener(this);
         mVideoPlayBtn.setOnClickListener(this);
         mFullScreenBtn.setOnClickListener(this);
+        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mVideoPlayBtn.setImageResource(R.mipmap.play_icon);
+            }
+        });
         mVideoWindow.setListener(new CustomSurfaceView.TouchListener() {
             @Override
             public void onSurfaceViewTouchListener_UP() {
@@ -229,10 +243,7 @@ public class VideoFragment extends BaseFragment implements Runnable, RecycleAdap
                 long id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID));
                 String name = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME));
                 float size = cursor.getFloat(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE));
-                size = size/1024/1024;
                 long duration = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION));
-                Utils timeUtils = new Utils();
-                String time = timeUtils.stringForTime((int) duration);
                 String data = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
                 Bitmap bitmap = MediaStore.Video.Thumbnails.getThumbnail(resolver, id, MediaStore.Video.Thumbnails.MINI_KIND, null);
                 MediaItem videoData = new MediaItem(name,duration, ((long) size),data,null,null,null,bitmap);
@@ -282,12 +293,20 @@ public class VideoFragment extends BaseFragment implements Runnable, RecycleAdap
             e.printStackTrace();
         }
         mMediaPlayer.start();
+        animHide();
         int duration = mMediaPlayer.getDuration();
         mVideoProgress.setMax(duration);
         mVideoPlayBtn.setEnabled(true);
         mVideoPlayBtn.setImageResource(R.mipmap.pause_icon);
         mVideoTitle.setText(videoData.getName());
         handler.sendEmptyMessage(VIDEO_PLAY_TIME);
+    }
+
+    private void animHide() {
+        anim.stop();
+        imgAnim.setVisibility(View.GONE);
+        mVideoCollector.setVisibility(View.VISIBLE);
+        mVideoWindow.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -338,19 +357,9 @@ public class VideoFragment extends BaseFragment implements Runnable, RecycleAdap
                 if (mVideo == null && playPosition < 0){
                     return;
                 }
-
-//                Intent intent = new Intent(getActivity(),SystemVideoPlayer.class);
-//                intent.setDataAndType(Uri.parse(mVideo.get(playPosition).getData()),"video/*");
-//                intent.putParcelableArrayListExtra("videolist",mVideo);
-//                intent.putExtra("position",playPosition);
-//                getContext().startActivity(intent);
-                Log.d(TAG,"click full screen");
-//                Intent intent = new Intent(getActivity(),SystemVideoPlayer.class);
-//                getContext().startActivity(intent);
-
                 Intent intent = new Intent(getActivity(),VitamioVideoPlayer.class);
                 if (mMediaDataManager != null){
-                    mMediaDataManager.setMediaItems(mVideo);
+                    mMediaDataManager.setVideoMediaItems(mVideo);
                 }
                 intent.putExtra("position",playPosition);
                 intent.putExtra("current_position",mMediaPlayer.getCurrentPosition());
@@ -438,5 +447,19 @@ public class VideoFragment extends BaseFragment implements Runnable, RecycleAdap
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
 
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (hidden){
+            Log.d(TAG,"hidden");
+            if (null != mMediaPlayer){
+                mMediaPlayer.pause();
+                mVideoPlayBtn.setImageResource(R.mipmap.play_icon);
+            }
+        }else {
+            Log.d(TAG,"show");
+        }
+        super.onHiddenChanged(hidden);
     }
 }

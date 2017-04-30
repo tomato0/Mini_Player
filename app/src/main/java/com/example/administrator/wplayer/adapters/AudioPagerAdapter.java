@@ -11,8 +11,10 @@ import android.widget.TextView;
 import com.example.administrator.wplayer.R;
 import com.example.administrator.wplayer.models.MediaItem;
 import com.example.administrator.wplayer.utils.Utils;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 作者：wangshaoqiang on 2016/7/18 10:16
@@ -22,10 +24,10 @@ public class AudioPagerAdapter extends BaseAdapter {
 
     private final boolean isVideo;
     private Context context;
-    private final ArrayList<MediaItem> mediaItems;
+    private final List<MediaItem> mediaItems;
     private Utils utils;
 
-    public AudioPagerAdapter(Context context, ArrayList<MediaItem> mediaItems, boolean isVideo){
+    public AudioPagerAdapter(Context context, List<MediaItem> mediaItems, boolean isVideo){
         this.context = context;
         this.mediaItems = mediaItems;
         this.isVideo = isVideo;
@@ -66,12 +68,23 @@ public class AudioPagerAdapter extends BaseAdapter {
         //根据position得到列表中对应位置的数据
         MediaItem mediaItem = mediaItems.get(position);
         viewHoder.tv_name.setText(mediaItem.getName());
-        viewHoder.tv_size.setText(Formatter.formatFileSize(context, mediaItem.getSize()));
-        viewHoder.tv_time.setText(utils.stringForTime((int) mediaItem.getDuration()));
+        if (mediaItem.getDuration() == 0){
+            viewHoder.tv_size.setVisibility(View.GONE);
+            viewHoder.tv_time.setText(mediaItem.getArtist());
+        }else {
+            viewHoder.tv_size.setText(Formatter.formatFileSize(context, mediaItem.getSize()));
+            viewHoder.tv_time.setText(utils.stringForTime((int) mediaItem.getDuration()));
+        }
 
         if(!isVideo){
             //音频
-            viewHoder.iv_icon.setImageResource(R.drawable.music_default_bg);
+            if (mediaItem.getImageUrl() == null){
+                viewHoder.iv_icon.setImageResource(R.drawable.music_default_bg);
+            }else {
+                Picasso.with(context)
+                        .load(mediaItem.getImageUrl())
+                        .into(viewHoder.iv_icon);
+            }
         }
 
         return convertView;

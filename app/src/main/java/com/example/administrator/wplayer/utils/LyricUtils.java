@@ -53,7 +53,7 @@ public class LyricUtils {
             isExistsLyric = false;
         }else{
             //歌词文件存在
-            //1.解析歌词 一行的读取-解析
+            //anim1.解析歌词 一行的读取-解析
             lyrics = new ArrayList<>();
             isExistsLyric = true;
             BufferedReader reader = null;
@@ -73,7 +73,7 @@ public class LyricUtils {
             }
 
 
-            //2.排序
+            //anim2.排序
             Collections.sort(lyrics, new Comparator<Lyric>() {
                 @Override
                 public int compare(Lyric lhs, Lyric rhs) {
@@ -173,9 +173,9 @@ public class LyricUtils {
      */
     private String parsedLyric(String line) {
         ////indexOf第一次出现[的位置
-        int pos1 = line.indexOf("[");//0,如果没有返回-1
+        int pos1 = line.indexOf("[");//0,如果没有返回-anim1
 
-        int pos2 = line.indexOf("]");//9,如果没有返回-1
+        int pos2 = line.indexOf("]");//9,如果没有返回-anim1
 
         if(pos1 ==0 && pos2 != -1){//肯定是由一句歌词
 
@@ -189,8 +189,8 @@ public class LyricUtils {
             int i = 1;
             while (pos1 ==0 && pos2 != -1){
                 content = content.substring(pos2 + 1); //[03:37.32][00:59.73]我在这里欢笑--->[00:59.73]我在这里欢笑-->我在这里欢笑
-                pos1 = content.indexOf("[");//0/-1
-                pos2 = content.indexOf("]");//9//-1
+                pos1 = content.indexOf("[");//0/-anim1
+                pos2 = content.indexOf("]");//9//-anim1
 
                 if(pos2 != -1 ){
                     strTime = content.substring(pos1 + 1, pos2);//03:37.32-->00:59.73
@@ -240,15 +240,15 @@ public class LyricUtils {
         long result = -1;
         try{
 
-            //1.把02:04.12按照:切割成02和04.12
+            //anim1.把02:04.12按照:切割成02和04.12
             String[] s1 = strTime.split(":");
-            //2.把04.12按照.切割成04和12
+            //anim2.把04.12按照.切割成04和12
             String[] s2 = s1[1].split("\\.");
 
-            //1.分
+            //anim1.分
             long min = Long.parseLong(s1[0]);
 
-            //2.秒
+            //anim2.秒
             long second = Long.parseLong(s2[0]);
 
             //3.毫秒

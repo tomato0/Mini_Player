@@ -1,8 +1,8 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.administrator.wplayer.fragments.VideoFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -10,85 +10,84 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        >
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:contentScrim="#ff0"
             app:layout_scrollFlags="scroll|enterAlways"
-            app:scrimVisibleHeightTrigger="50dp"
-            >
-            <LinearLayout
+            app:scrimVisibleHeightTrigger="50dp">
 
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:layout_height="wrap_content">
-                <FrameLayout
+                android:layout_height="200dp">
+
+                <com.example.administrator.wplayer.customview.CustomSurfaceView
+                    android:id="@+id/video_top_window"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp">
-                    <com.example.administrator.wplayer.customview.CustomSurfaceView
-                        android:id="@+id/video_top_window"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        />
-                    <LinearLayout
-                        android:id="@+id/video_collector"
-                        android:layout_width="match_parent"
+                    android:layout_height="200dp" />
+
+                <LinearLayout
+                    android:id="@+id/video_collector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:alpha="0.5"
+                    android:background="#e2dede"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <SeekBar
+                        android:id="@+id/video_progress"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:gravity="center_vertical"
-                        android:background="#e2dede"
-                        android:alpha="0.5"
-                        android:visibility="gone"
-                        android:orientation="horizontal">
-                        <SeekBar
-                            android:id="@+id/video_progress"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content" />
-                        <TextView
-                            android:id="@+id/txt_video_time"
-                            android:layout_marginRight="5dp"
-                            android:layout_width="100dp"
-                            android:gravity="right"
-                            android:textColor="#000"
-                            android:text="0:00:00"
-                            android:layout_height="20dp" />
-                        <ImageView
-                            android:id="@+id/full_screen_btn"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@mipmap/full_screen_icon"
-                            android:layout_marginRight="4dp"
-                            />
-                    </LinearLayout>
-                </FrameLayout>
+                        android:layout_weight="1" />
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/txt_video_time"
+                        android:layout_width="100dp"
+                        android:layout_height="20dp"
+                        android:layout_marginRight="5dp"
+                        android:gravity="right"
+                        android:text="0:00:00"
+                        android:textColor="#000" />
 
+                    <ImageView
+                        android:id="@+id/full_screen_btn"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginRight="4dp"
+                        android:src="@mipmap/full_screen_icon" />
+                </LinearLayout>
 
+                <ImageView
+                    android:id="@+id/img_anim"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    />
+            </FrameLayout>
         </android.support.design.widget.CollapsingToolbarLayout>
 
         <LinearLayout
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:orientation="vertical"
             android:id="@+id/tool_bar"
-            android:layout_gravity="bottom"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
+            android:layout_gravity="bottom"
             android:background="#85f5bd"
-            app:layout_collapseMode="pin">
+            android:orientation="vertical">
+
             <TextView
                 android:id="@+id/video_title"
-                android:gravity="center_vertical"
                 android:layout_width="match_parent"
-                android:textSize="18sp"
-                android:maxLines="1"
-                android:textColor="#c67fef"
+                android:layout_height="match_parent"
                 android:layout_marginRight="80dp"
                 android:ellipsize="none"
-                android:layout_height="match_parent" />
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:textColor="#c67fef"
+                android:textSize="18sp" />
         </LinearLayout>
 
 
@@ -98,27 +97,28 @@
         android:id="@+id/floating_play_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_anchor="@id/app_bar"
         android:layout_marginRight="8dp"
         android:src="@mipmap/play_icon"
-        app:layout_anchorGravity="bottom|end|right"
-        />
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom|end|right" />
+
     <FrameLayout
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_collapseMode="pin">
+
         <ProgressBar
             android:id="@+id/local_video_progress"
-            android:layout_gravity="center"
             android:layout_width="80dp"
-            android:indeterminateDrawable="@drawable/drawable_progress"
-            android:layout_height="80dp" />
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:indeterminateDrawable="@drawable/drawable_progress" />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/local_video_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-        </android.support.v7.widget.RecyclerView>
+            android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
     </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>

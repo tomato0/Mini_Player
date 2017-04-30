@@ -2,6 +2,7 @@ package com.example.administrator.wplayer.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.Formatter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.administrator.wplayer.R;
-import com.example.administrator.wplayer.models.LocalVideoData;
 import com.example.administrator.wplayer.models.MediaItem;
+import com.example.administrator.wplayer.utils.Utils;
 
-import java.util.Formatter;
 import java.util.List;
 
 /**
@@ -28,6 +28,7 @@ public class RecycleAdapter extends RecyclerView.Adapter implements View.OnClick
     private List<MediaItem> videoData;
     private RecyclerView recyclerView;
     private OnChildVideoClickListener listener;
+    private Utils timeUtils = new Utils();
 
     public void setChildClickListener(OnChildVideoClickListener listener) {
         this.listener = listener;
@@ -84,8 +85,9 @@ public class RecycleAdapter extends RecyclerView.Adapter implements View.OnClick
         ViewHolder viewHolder = (ViewHolder) holder;
         viewHolder.img.setImageBitmap(videoData.get(position).getBitmap());
         viewHolder.name.setText(videoData.get(position).getName());
-        viewHolder.time.setText(String.valueOf(videoData.get(position).getDuration()));
-        viewHolder.size.setText(android.text.format.Formatter.formatFileSize(context,videoData.
+        String time = timeUtils.stringForTime((int) videoData.get(position).getDuration());
+        viewHolder.time.setText(time);
+        viewHolder.size.setText(Formatter.formatFileSize(context,videoData.
                 get(position).getSize()));
     }
 
@@ -100,6 +102,6 @@ public class RecycleAdapter extends RecyclerView.Adapter implements View.OnClick
 
     //监听接口
     public interface OnChildVideoClickListener{
-        void  onChildClickListener(RecyclerView recyclerView,View itemView,int position,MediaItem videoData);
+        void  onChildClickListener(RecyclerView recyclerView, View itemView, int position, MediaItem videoData);
     }
 }

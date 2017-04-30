@@ -3,13 +3,13 @@
     package="com.example.administrator.wplayer">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:allowBackup="true"
         android:name=".MyApplication"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -23,26 +23,24 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleInstance">
-        </activity>
-        <activity android:name=".activity.AudioPlayerActivity" android:launchMode="singleTask"/>
+            android:launchMode="singleInstance" />
+        <activity
+            android:name=".activity.AudioPlayerActivity"
+            android:launchMode="singleTask" />
 
         <service android:name=".service.MusicPlayerService">
             <intent-filter>
-                <action android:name="com.atguigu.mobileplayer_OPENAUDIO" />
+                <action android:name="com.wsq.mobileplayer_OPENAUDIO" />
             </intent-filter>
         </service>
 
-        <activity android:name=".activity.SearchActivity"/>
-
+        <activity android:name=".activity.SearchActivity" />
         <activity
             android:name=".activity.SystemVideoPlayer"
-
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:label="@string/player_name"
             android:screenOrientation="landscape"
             android:theme="@style/noAnimation_Theme">
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -53,6 +51,7 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:mimeType="video/*" />
@@ -70,7 +69,6 @@
                 <data android:mimeType="video/3gpp" />
                 <data android:mimeType="video/3gpp2" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -211,7 +209,6 @@
                 <data android:pathPattern=".*\\.m4v" />
                 <data android:pathPattern=".*\\.mp4" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -223,42 +220,50 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="rtsp" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="http" />
                 <data android:mimeType="video/*" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="video/*" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:scheme="file" />
                 <data android:mimeType="video/*" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
         </activity>
-
         <activity
             android:name=".activity.VitamioVideoPlayer"
-
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="landscape"
-            android:theme="@style/noAnimation_Theme"
-            />
+            android:theme="@style/noAnimation_Theme" />
+        <activity android:name=".activity.AudioListActivity" />
+
+        <service android:name=".service.DownMusicService" />
 
     </application>
 

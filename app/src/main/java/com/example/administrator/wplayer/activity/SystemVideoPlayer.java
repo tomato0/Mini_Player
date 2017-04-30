@@ -113,7 +113,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
     private int position;
 
     /**
-     * 1.定义手势识别器
+     * anim1.定义手势识别器
      */
     private GestureDetector detector;
 
@@ -399,14 +399,14 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
             super.handleMessage(msg);
             switch (msg.what) {
                 case SHOW_SPEED://显示网速
-                    //1.得到网络速度
+                    //anim1.得到网络速度
                     String netSpeed = utils.getNetSpeed(SystemVideoPlayer.this);
 
                     //显示网络速
                     tv_laoding_netspeed.setText("玩命加载中..."+netSpeed);
                     tv_buffer_netspeed.setText("缓存中..."+netSpeed);
 
-                    //2.每两秒更新一次
+                    //anim2.每两秒更新一次
                     handler.removeMessages(SHOW_SPEED);
                     handler.sendEmptyMessageDelayed(SHOW_SPEED, 2000);
 
@@ -416,10 +416,10 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
                     break;
                 case PROGRESS:
 
-                    //1.得到当前的视频播放进程
+                    //anim1.得到当前的视频播放进程
                     int currentPosition = videoview.getCurrentPosition();//0
 
-                    //2.SeekBar.setProgress(当前进度);
+                    //anim2.SeekBar.setProgress(当前进度);
                     seekbarVideo.setProgress(currentPosition);
 
 
@@ -522,7 +522,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         //得到播放地址
         uri = getIntent().getData();//文件夹，图片浏览器，QQ空间
         mMediaDataManager = MediaDataManager.getInstance();
-        mediaItems = mMediaDataManager.getMediaItems();
+        mediaItems = mMediaDataManager.getVideoMediaItems();
         mCurrentPosition = (int) getIntent().getLongExtra("current_position", 0);
         position = getIntent().getIntExtra("position", 0);
         Log.d(TAG,"position = "+position +",current = "+mCurrentPosition);
@@ -538,7 +538,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         intentFiler.addAction(Intent.ACTION_BATTERY_CHANGED);
         registerReceiver(receiver, intentFiler);
 
-        //2.实例化手势识别器，并且重写双击，点击，长按
+        //anim2.实例化手势识别器，并且重写双击，点击，长按
         detector = new GestureDetector(this, new MySimpleOnGestureListener());
         //得到屏幕的宽和高
         //过时的方式
@@ -608,14 +608,14 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
     private void setVideoType(int defaultScreen) {
         switch (defaultScreen) {
             case FULL_SCREEN://全屏
-                //1.设置视频画面的大小-屏幕有多大就是多大
+                //anim1.设置视频画面的大小-屏幕有多大就是多大
                 videoview.setVideoSize(screenWidth, screenHeight);
-                //2.设置按钮的状态-默认
+                //anim2.设置按钮的状态-默认
                 btnVideoSiwchScreen.setBackgroundResource(R.drawable.btn_video_siwch_screen_default_selector);
                 isFullScreen = true;
                 break;
             case DEFAULT_SCREEN://默认
-                //1.设置视频画面的大小
+                //anim1.设置视频画面的大小
                 //视频真实的宽和高
                 int mVideoWidth = videoWidth;
                 int mVideoHeight = videoHeight;
@@ -634,7 +634,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
                 }
 
                 videoview.setVideoSize(width, height);
-                //2.设置按钮的状态--全屏
+                //anim2.设置按钮的状态--全屏
                 btnVideoSiwchScreen.setBackgroundResource(R.drawable.btn_video_siwch_screen_full_selector);
                 isFullScreen = false;
                 break;
@@ -804,13 +804,13 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
             videoHeight = mp.getVideoHeight();
             videoview.start();//开始播放
             videoview.seekTo(mCurrentPosition);
-            //1.视频的总时长，关联总长度
+            //anim1.视频的总时长，关联总长度
             int duration = videoview.getDuration();
             seekbarVideo.setMax(duration);
             tvDuration.setText(utils.stringForTime(duration));
 
             hideMediaController();//默认是隐藏控制面板
-            //2.发消息
+            //anim2.发消息
             handler.sendEmptyMessage(PROGRESS);
 
 //            videoview.setVideoSize(200,200);
@@ -838,9 +838,9 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         @Override
         public boolean onError(MediaPlayer mp, int what, int extra) {
 //            Toast.makeText(SystemVideoPlayer.this, "播放出错了哦", Toast.LENGTH_SHORT).show();
-            //1.播放的视频格式不支持--跳转到万能播放器继续播放
+            //anim1.播放的视频格式不支持--跳转到万能播放器继续播放
             startVitamioPlayer();
-            //2.播放网络视频的时候，网络中断---1.如果网络确实断了，可以提示用于网络断了；2.网络断断续续的，重新播放
+            //anim2.播放网络视频的时候，网络中断---anim1.如果网络确实断了，可以提示用于网络断了；anim2.网络断断续续的，重新播放
             //3.播放的时候本地文件中间有空白---下载做完成
             return true;
         }
@@ -943,7 +943,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         detector.onTouchEvent(event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN://手指按下
-                //1.按下记录值
+                //anim1.按下记录值
                 startY = event.getY();
                 startX = event.getX();
                 mVol = am.getStreamVolume(AudioManager.STREAM_MUSIC);
@@ -952,7 +952,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
 
                 break;
             case MotionEvent.ACTION_MOVE://手指移动
-                //2.移动的记录相关值
+                //anim2.移动的记录相关值
                 float endY = event.getY();
                 float endX = event.getX();
                 float distanceY = startY - endY;
@@ -997,11 +997,11 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
     private Vibrator vibrator;
     /*
      *
-     * 设置屏幕亮度 lp = 0 全暗 ，lp= -1,根据系统设置， lp = 1; 最亮
+     * 设置屏幕亮度 lp = 0 全暗 ，lp= -anim1,根据系统设置， lp = anim1; 最亮
      */
     public void setBrightness(float brightness) {
         WindowManager.LayoutParams lp = getWindow().getAttributes();
-        // if (lp.screenBrightness <= 0.1) {
+        // if (lp.screenBrightness <= 0.anim1) {
         // return;
         // }
         lp.screenBrightness = lp.screenBrightness + brightness / 255.0f;
@@ -1066,7 +1066,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
     @Override
     public void onBackPressed() {
         MediaDataManager instance = MediaDataManager.getInstance();
-        instance.setMediaItems(mediaItems);
+        instance.setVideoMediaItems(mediaItems);
         if (null != instance.getInfoCallBack()){
             instance.getInfoCallBack().videoMessage(position,videoview.getCurrentPosition());
         }

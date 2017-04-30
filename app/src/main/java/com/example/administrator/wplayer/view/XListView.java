@@ -248,7 +248,7 @@ public class XListView extends ListView implements OnScrollListener {
 		}
 		mFooterView.setBottomMargin(height);
 
-//		setSelection(mTotalItemCount - 1); // scroll to bottom
+//		setSelection(mTotalItemCount - anim1); // scroll to bottom
 	}
 
 	private void resetFooterHeight() {

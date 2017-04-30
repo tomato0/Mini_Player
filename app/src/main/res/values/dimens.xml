@@ -2,4 +2,35 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="deeply_clean_header_height">160dp</dimen>
+    <dimen name="deeply_clean_header_marginleft">12dp</dimen>
+    <dimen name="deeply_clean_header_marginright">12dp</dimen>
+    <dimen name="deeply_clean_header_circle_radius">60dp</dimen>
+    <dimen name="deeply_clean_header_circle_stripeWidth">8dp</dimen>
+    <dimen name="deeply_clean_header_circle_textone_size">30sp</dimen>
+    <dimen name="deeply_clean_header_circle_texttwo_size">15sp</dimen>
+    <dimen name="deeply_clean_header_circle_textthree_size">15sp</dimen>
+    <dimen name="deeply_clean_header_space_text_size">12sp</dimen>
+    <dimen name="deeply_clean_header_space_text_margintop">10dp</dimen>
+    <dimen name="deeply_clean_header_store_layout_marginLeft">20dp</dimen>
+    <dimen name="deeply_clean_header_store_string_size">15sp</dimen>
+    <dimen name="deeply_clean_header_space_size_size">60sp</dimen>
+    <dimen name="deeply_clean_header_space_unit_size">18sp</dimen>
+    <dimen name="deeply_clean_item_icon_width">36dp</dimen>
+    <dimen name="deeply_clean_item_icon_height">36dp</dimen>
+    <dimen name="deeply_clean_item_title_leftmargin">16dp</dimen>
+
+    <dimen name="deeply_detail_header_height">40dp</dimen>
+    <dimen name="deeply_detail_header_text">14sp</dimen>
+    <dimen name="deeply_detail_header_store_unit_bottommargin">10dp</dimen>
+    <dimen name="deeply_detail_item_icon_width">50dp</dimen>
+    <dimen name="deeply_detail_item_icon_height">50dp</dimen>
+    <dimen name="deeply_detail_item_icon_topmargin">10dp</dimen>
+    <dimen name="deeply_detail_item_icon_bottommargin">10dp</dimen>
+    <dimen name="deeply_detail_item_icon_leftmargin">20dp</dimen>
+    <dimen name="deeply_detail_item_icon_rightmargin">20dp</dimen>
+    <dimen name="deeply_detail_item_title_size">20sp</dimen>
+    <dimen name="deeply_detail_item_checkbox_leftmargin">10dp</dimen>
+    <dimen name="deeply_detail_item_checkbox_rightmargin">10dp</dimen>
 </resources>

@@ -14,9 +14,6 @@ import com.example.administrator.wplayer.utils.LogUtil;
 import java.util.ArrayList;
 
 /**
- * 作者：尚硅谷-杨光福 on 2016/7/25 09:36
- * 微信：yangguangfu520
- * QQ号：541433511
  * 作用：自定义歌词显示控件
  */
 public class ShowLyricView extends TextView {

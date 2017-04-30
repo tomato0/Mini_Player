@@ -1,84 +1,79 @@
 package com.example.administrator.wplayer.fragments;
 
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.ContentResolver;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Build;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
-import android.provider.MediaStore;
+import android.os.RemoteException;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.administrator.wplayer.IMusicPlayerService;
 import com.example.administrator.wplayer.R;
-import com.example.administrator.wplayer.activity.AudioPlayerActivity;
-import com.example.administrator.wplayer.adapters.AudioPagerAdapter;
+import com.example.administrator.wplayer.activity.AudioListActivity;
 import com.example.administrator.wplayer.base.BaseFragment;
-import com.example.administrator.wplayer.models.MediaItem;
+import com.example.administrator.wplayer.models.MusicType;
+import com.example.administrator.wplayer.service.MusicPlayerService;
+import com.example.administrator.wplayer.single.MediaDataManager;
+import com.example.administrator.wplayer.utils.AnimatorUtils;
+import com.example.administrator.wplayer.utils.NetAudioUtils;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AudioFragment extends BaseFragment {
+public class AudioFragment extends BaseFragment implements View.OnClickListener {
     private static final String TAG = "AudioFragment";
 
+    private IMusicPlayerService service;//服务的代理类，通过它可以调用服务的方法
+    private ServiceConnection con;
+    private MediaDataManager mediaDataManager;
+    private NetAudioUtils netAudioUtils;
+    private List<MusicType> mMusicTypes;
+    private ObjectAnimator a1;
+    private ObjectAnimator a2;
+    private ObjectAnimator a3;
+    private ObjectAnimator a4;
 
-    private AudioPagerAdapter videoPagerAdapter;
 
-    /**
-     * 装数据集合
-     */
-    private ArrayList<MediaItem> mediaItems;
-
-    private ListView listview;
-    private TextView tv_nomedia;
-    private ProgressBar pb_loading;
-    private Handler handler = new Handler(){
+    private FrameLayout localMusic;
+    private FrameLayout netMusic1;
+    private TextView netMusicTxt1;
+    private FrameLayout netMusic2;
+    private TextView localText;
+    private TextView netMusicTxt2;
+    private FrameLayout netMusic3;
+    private TextView netMusicTxt3;
+    private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if(mediaItems != null && mediaItems.size() >0){
-                //有数据
-                //设置适配器
-                videoPagerAdapter = new AudioPagerAdapter(getContext(),mediaItems,false);
-                listview.setAdapter(videoPagerAdapter);
-                //把文本隐藏
-                tv_nomedia.setVisibility(View.GONE);
-            }else{
-                //没有数据
-                //文本显示
-                tv_nomedia.setVisibility(View.VISIBLE);
-                tv_nomedia.setText("没有发现音频....");
-            }
-
-
-            //ProgressBar隐藏
-            pb_loading.setVisibility(View.GONE);
         }
     };
+    private AnimatorUtils animatorUtils;
 
     public AudioFragment() {
         // Required empty public constructor
     }
 
+
     @Override
     public String getFragmentTitle() {
-        return "本地音乐";
+        return "音乐";
     }
 
     @Override
@@ -86,122 +81,188 @@ public class AudioFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_audio, container, false);
-        initView(view);
-        initData();
+        animatorUtils = AnimatorUtils.getInstance();
+        findViews(view);
+        initListener();
+        initAudioType();
+        mediaDataManager = MediaDataManager.getInstance();
+        if (null != mediaDataManager.getAudioMediaItems()){
+            initConnection();
+            bindAndStartService();
+        }
         return view;
     }
 
-    private void initView(View view) {
-        listview = (ListView) view.findViewById(R.id.listview);
-        tv_nomedia = (TextView) view.findViewById(R.id.tv_nomedia);
-        pb_loading = (ProgressBar) view.findViewById(R.id.pb_loading);
-        //设置ListView的Item的点击事件
-        listview.setOnItemClickListener(new MyOnItemClickListener());
+    private void initData() {
+        localText.setText(mMusicTypes.get(0).getName());
+        netMusicTxt1.setText(mMusicTypes.get(1).getName());
+        netMusicTxt2.setText(mMusicTypes.get(2).getName());
+        netMusicTxt3.setText(mMusicTypes.get(3).getName());
+        localMusic.setOnClickListener(this);
+        netMusic1.setOnClickListener(this);
+        netMusic2.setOnClickListener(this);
+        netMusic3.setOnClickListener(this);
     }
 
-    class MyOnItemClickListener implements AdapterView.OnItemClickListener {
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            //3.传递列表数据-对象-序列化
-            Intent intent = new Intent(getContext(),AudioPlayerActivity.class);
-            intent.putExtra("position",position);
-            getContext().startActivity(intent);
-
-        }
+    private void findViews(View view) {
+        localMusic = (FrameLayout) view.findViewById( R.id.local_music );
+        localText = (TextView) view.findViewById( R.id.local_text );
+        netMusic1 = (FrameLayout) view.findViewById( R.id.net_music1 );
+        netMusicTxt1 = (TextView) view.findViewById( R.id.net_music_txt1 );
+        netMusic2 = (FrameLayout) view.findViewById( R.id.net_music2 );
+        netMusicTxt2 = (TextView) view.findViewById( R.id.net_music_txt2 );
+        netMusic3 = (FrameLayout) view.findViewById( R.id.net_music3 );
+        netMusicTxt3 = (TextView) view.findViewById( R.id.net_music_txt3 );
     }
 
-    public void initData() {
-        Log.d(TAG,"本地视频的数据被初始化了。。。");
-        //加载本地视频数据
-        getDataFromLocal();
-    }
-
-    /**
-     * 从本地的sdcard得到数据
-     * //1.遍历sdcard,后缀名
-     * //2.从内容提供者里面获取视频
-     * //3.如果是6.0的系统，动态获取读取sdcard的权限
-     */
-    private void getDataFromLocal() {
-
-        new Thread(){
+    private void localAnimator() {
+        a1 = animatorUtils.rotateViewAnimator(localMusic, -90, 0, 300, new AnimatorListenerAdapter() {
             @Override
-            public void run() {
-                super.run();
+            public void onAnimationEnd(Animator animation) {
+                netMusic1Animator();
+            }
+        });
+    }
 
-//                isGrantExternalRW((Activity) context);
-//                SystemClock.sleep(2000);
-                mediaItems = new ArrayList<>();
-                ContentResolver resolver = getContext().getContentResolver();
-                Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                String[] objs = {
-                        MediaStore.Audio.Media.DISPLAY_NAME,//视频文件在sdcard的名称
-                        MediaStore.Audio.Media.DURATION,//视频总时长
-                        MediaStore.Audio.Media.SIZE,//视频的文件大小
-                        MediaStore.Audio.Media.DATA,//视频的绝对地址
-                        MediaStore.Audio.Media.ARTIST,//歌曲的演唱者
+    private void netMusic1Animator() {
+        a2 = animatorUtils.rotateViewAnimator(netMusic1, -90, 0, 300, new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                netMusic2Animator();
+            }
+        });
+    }
 
-                };
-                Cursor cursor = resolver.query(uri, objs, null, null, null);
-                if(cursor != null){
-                    while (cursor.moveToNext()){
+    private void netMusic2Animator() {
+        a3 = animatorUtils.rotateViewAnimator(netMusic2, -90, 0, 300, new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                netMusic3Animator();
+            }
+        });
+    }
 
-                        MediaItem mediaItem = new MediaItem();
-
-                        mediaItems.add(mediaItem);//写在上面
-
-                        String name = cursor.getString(0);//视频的名称
-                        mediaItem.setName(name);
-
-                        long duration = cursor.getLong(1);//视频的时长
-                        mediaItem.setDuration(duration);
-
-                        long size = cursor.getLong(2);//视频的文件大小
-                        mediaItem.setSize(size);
-
-                        String data = cursor.getString(3);//视频的播放地址
-                        mediaItem.setData(data);
-
-                        String artist = cursor.getString(4);//艺术家
-                        mediaItem.setArtist(artist);
-
-
-
-                    }
-
-                    cursor.close();
-
-
-                }
-                //Handler发消息
-                handler.sendEmptyMessage(10);
-
+    private void netMusic3Animator() {
+        a4 = animatorUtils.rotateViewAnimator(netMusic3, -90, 0, 300, new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
 
             }
-        }.start();
+        });
+    }
+
+    private void initListener() {
 
     }
 
-    /**
-     * 解决安卓6.0以上版本不能读取外部存储权限的问题
-     * @param activity
-     * @return
-     */
-    public static boolean isGrantExternalRW(Activity activity) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && activity.checkSelfPermission(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+    private void initConnection() {
+        if (con != null){
+            return;
+        }
+        con = new ServiceConnection() {
 
-            activity.requestPermissions(new String[]{
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-            }, 1);
+            /**
+             * 当连接成功的时候回调这个方法
+             * @param name
+             * @param iBinder
+             */
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder iBinder) {
+                service = IMusicPlayerService.Stub.asInterface(iBinder);
+            }
 
-            return false;
+            /**
+             * 当断开连接的时候回调这个方法
+             * @param name
+             */
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                try {
+                    if(service != null){
+                        service.stop();
+                        service = null;
+                    }
+
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+    }
+
+    private void initAudioType() {
+        netAudioUtils = NetAudioUtils.getInstance();
+        mMusicTypes = netAudioUtils.getNetAudioByType();
+        initData();
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent(getContext(), AudioListActivity.class);
+        switch (v.getId()) {
+            case R.id.local_music:
+                intent.putExtra("type","");
+                break;
+            case R.id.net_music1:
+                intent.putExtra("type",mMusicTypes.get(1).getId());
+                break;
+            case R.id.net_music2:
+                intent.putExtra("type",mMusicTypes.get(2).getId());
+                break;
+            case R.id.net_music3:
+                intent.putExtra("type",mMusicTypes.get(3).getId());
+                break;
+        }
+        startActivity(intent);
+    }
+
+    private void bindAndStartService() {
+        Intent intent = new Intent(getContext(), MusicPlayerService.class);
+        intent.setAction("com.wsq.mobileplayer_OPENAUDIO");
+        getContext().bindService(intent, con, Context.BIND_AUTO_CREATE);
+        getContext().startService(intent);//不至于实例化多个服务
+    }
+
+    @Override
+    public void onDestroy() {
+        if(con != null){
+            getContext().unbindService(con);
+            con = null;
         }
 
-        return true;
+        if (mHandler != null){
+            mHandler.removeCallbacksAndMessages(null);
+        }
+        super.onDestroy();
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (mMusicTypes != null){
+            if (!hidden && animatorUtils != null){
+                localAnimator();
+            }
+        }
+        if (hidden){
+            showCollectorView();
+            if (a1 != null) {
+                a1.cancel();
+            }
+            if (a2 != null) {
+                a2.cancel();
+            }
+            if (a3 != null) {
+                a3.cancel();
+            }
+            if (a4 != null) {
+                a4.cancel();
+            }
+        }
+        super.onHiddenChanged(hidden);
+    }
+
+    private void showCollectorView() {
+
+    }
 }
