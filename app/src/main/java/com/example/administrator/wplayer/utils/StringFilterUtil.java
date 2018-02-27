@@ -1,7 +1,7 @@
 package com.example.administrator.wplayer.utils;
 
 /**
- * Created by houjie on 12/15/16.
+ * Created by wangshaoqiang on 12/15/16.
  */
 public class StringFilterUtil {
     public static String filterAlphabet(String string) {
