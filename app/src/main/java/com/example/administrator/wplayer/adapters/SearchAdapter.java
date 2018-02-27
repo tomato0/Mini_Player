@@ -14,9 +14,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 /**
- * 作者：杨光福 on 2016/7/18 10:16
- * 微信：yangguangfu520
- * QQ号：541433511
+ * 作者：wangshaoqiang
  * 作用：NetVideoPager的适配器
  */
 public class SearchAdapter extends BaseAdapter {
