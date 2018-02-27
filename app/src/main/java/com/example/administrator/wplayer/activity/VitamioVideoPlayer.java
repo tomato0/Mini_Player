@@ -45,8 +45,6 @@ import io.vov.vitamio.Vitamio;
 
 /**
  * 作者：wangshaoqiang on 2016/7/18 10:30
- * 微信：yangguangfu520
- * QQ号：541433511
  * 作用：系统播放器
  */
 public class VitamioVideoPlayer extends Activity implements View.OnClickListener {
