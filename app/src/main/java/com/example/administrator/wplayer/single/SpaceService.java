@@ -1,9 +1,7 @@
 /**
  * Copyright Statement:
  *
- * Company: Gionee Communication Equipment Limited
- *
- * Author: Houjie
+ * Author: wangshaoqiang
  *
  * Date: 2016-11-27
  */
