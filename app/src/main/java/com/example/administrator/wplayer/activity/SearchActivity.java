@@ -40,9 +40,7 @@ import java.util.List;
 
 
 /**
- * 作者：尚硅谷-杨光福 on 2016/7/25 15:19
- * 微信：yangguangfu520
- * QQ号：541433511
+ * 作者：wangshaoqiang
  * 作用：搜索页面
  */
 public class SearchActivity extends Activity {
